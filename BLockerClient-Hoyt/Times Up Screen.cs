@@ -24,13 +24,12 @@ namespace BLockerClient_Hoyt
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-			this.Focus();
+			
         }
 
         private void Times_Up_Screen_FormClosing(object sender, FormClosingEventArgs e)
         {
-			timer1.Stop();
-			timer1.Dispose();
+
         }
     }
 }

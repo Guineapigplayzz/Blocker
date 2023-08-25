@@ -76,7 +76,7 @@ namespace BLockerClient_Hoyt
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			DateTime currentTime = DateTime.Now;
-			limitEndTime = DateTime.Today.AddHours(-1);
+			limitEndTime = DateTime.Today.AddHours(22);
 			
 			if (currentTime > limitEndTime)
 			{
@@ -133,10 +133,17 @@ namespace BLockerClient_Hoyt
 		{
 			// Check if the current time exceeds the time limit or it's 5 AM
 			DateTime currentTime = DateTime.Now;
-			limitEndTime = DateTime.Today.AddHours(-1);
-			var a = DateTime.Today.AddHours(5);
-			if (currentTime >= a)
+			limitEndTime = DateTime.Today.AddHours(22);
+			int hour = currentTime.Hour;
+			string period = (hour < 12) ? "AM" : "PM";
+			var a = DateTime.Today.AddHours(29);
+			var aam = "AM";
+			var b = limitEndTime;
+			if (aam == period)
 			{
+			
+				if (currentTime >= a)
+				{
 
 
 				if (this.ShowInTaskbar == true)
@@ -145,56 +152,61 @@ namespace BLockerClient_Hoyt
 					isFormShowing = false;
 					this.Close();
 				}
-                else
-                {
+				else
+				{
 					return;
-                }
+				}	
 
 
+
+				}
+			
+			
+
+
+			
 
 			}
-			else
-			{
-
-
-				if (isFormShowing == false)
-				{
+            else if (isFormShowing == false || this.ShowInTaskbar == false)
+            {
+				
 
 
 					// If the current time is already past 11 PM, add one day to the limit end time
 					if (currentTime > limitEndTime)
 					{
-						
-						foreach (Screen screen in Screen.AllScreens)
+						if (isFormShowing == false || this.ShowInTaskbar == false)
 						{
-							Form monitorForm = new Form();
-							monitorForm.FormBorderStyle = FormBorderStyle.None;
-							monitorForm.StartPosition = FormStartPosition.Manual;
-							monitorForm.Bounds = screen.Bounds;
-							monitorForm.WindowState = FormWindowState.Maximized;
-							monitorForm.TopMost = true;
-							monitorForm.Opacity = 0.75;
+							// Create and show the monitor form
+							foreach (Screen screen in Screen.AllScreens)
+							{
+								Form monitorForm = new Form();
+								monitorForm.FormBorderStyle = FormBorderStyle.None;
+								monitorForm.StartPosition = FormStartPosition.Manual;
+								monitorForm.Bounds = screen.Bounds;
+								monitorForm.WindowState = FormWindowState.Maximized;
+								monitorForm.TopMost = true;
+								monitorForm.Opacity = 0.75;
 
-							monitorForm.Show();
-							this.ShowInTaskbar = true;
+								monitorForm.Show();
+								this.ShowInTaskbar = true;
+							}
 						}
 
-						Times_Up_Screen centerForm = new Times_Up_Screen();
-						centerForm.StartPosition = FormStartPosition.CenterScreen;
-						centerForm.TopMost = true;
-						centerForm.Show();
-						isFormShowing = true;
-						
-						
-					}
+						if (isFormShowing == false || this.ShowInTaskbar == false)
+						{
+							// Create and show the center form
+							Times_Up_Screen centerForm = new Times_Up_Screen();
+							centerForm.StartPosition = FormStartPosition.CenterScreen;
+							centerForm.TopMost = true;
+
+							// Ensure that the center form is always on top of the monitor form
+							centerForm.Owner = Application.OpenForms[0];
+							centerForm.ShowDialog();
+							isFormShowing = true;
+						}
+
 				}
-				else
-				{
-
-
-					return;
-				}
-
 			}
 
 
@@ -223,7 +235,7 @@ namespace BLockerClient_Hoyt
 		private LowLevelKeyboardProc _proc;
 		private IntPtr _hookID = IntPtr.Zero;
 
-		private DateTime limitEndTime = DateTime.Today.AddHours(-1);
+		private DateTime limitEndTime = DateTime.Today.AddHours(22);
 
 		public void Start()
 		{
@@ -262,7 +274,8 @@ namespace BLockerClient_Hoyt
                     else
                     {
 						// Cancel the key press
-						return (IntPtr)1;
+						return CallNextHookEx(_hookID, nCode, wParam, lParam);
+						//return (IntPtr)1;
 					}
 				
 				}

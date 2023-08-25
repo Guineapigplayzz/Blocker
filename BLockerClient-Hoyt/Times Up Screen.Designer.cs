@@ -89,6 +89,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Times_Up_Screen";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Times_Up_Screen";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Times_Up_Screen_FormClosing);
             this.ResumeLayout(false);
